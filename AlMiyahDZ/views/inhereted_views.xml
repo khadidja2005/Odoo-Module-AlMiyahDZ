@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ============================================== -->
+        <!-- ACTIONS POUR RÉCLAMATIONS FILTRÉES -->
+        <!-- ============================================== -->
+        <record id="action_claim_technical" model="ir.actions.act_window">
+            <field name="name">Réclamations techniques</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+            <field name="domain">[('is_claim', '=', True), ('type_reclamation', '=', 'technical')]</field>
+            <field name="context">{'default_is_claim': True, 'default_type_reclamation':
+                'technical'}</field>
+        </record>
+
+        <record id="action_claim_commercial" model="ir.actions.act_window">
+            <field name="name">Réclamations commerciales</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+            <field name="domain">[('is_claim', '=', True), ('type_reclamation', '=', 'commercial')]</field>
+            <field name="context">{'default_is_claim': True, 'default_type_reclamation':
+                'commercial'}</field>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- ACTIONS POUR CONTACTS / RÉCLAMANTS -->
+        <!-- ============================================== -->
+        <record id="action_almiyah_partners" model="ir.actions.act_window">
+            <field name="name">Réclamants</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('is_claimant', '=', True)]</field>
+            <field name="context">{'default_is_claimant': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créer un nouveau réclamant
+                </p>
+            </field>
+        </record>
+
+        <record id="action_almiyah_citizens" model="ir.actions.act_window">
+            <field name="name">Citoyens</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('is_claimant', '=', True), ('is_company', '=', False)]</field>
+            <field name="context">{'default_is_claimant': True, 'default_is_company': False}</field>
+        </record>
+
+        <record id="action_almiyah_companies" model="ir.actions.act_window">
+            <field name="name">Entreprises réclamantes</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('is_claimant', '=', True), ('is_company', '=', True)]</field>
+            <field name="context">{'default_is_claimant': True, 'default_is_company': True}</field>
+        </record>
+
+        <!-- Extension du formulaire partenaire -->
+        <record id="view_partner_form_almiyah" model="ir.ui.view">
+            <field name="name">res.partner.form.almiyah</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="is_claimant" />
+                    <field name="is_agency" />
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_claims" type="object" class="oe_stat_button"
+                        icon="fa-exclamation-circle"
+                        invisible="not is_claimant">
+                        <field name="claim_count" widget="statinfo" string="Réclamations" />
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- ACTIONS POUR EMPLOYÉS -->
+        <!-- ============================================== -->
+        <record id="action_almiyah_employees" model="ir.actions.act_window">
+            <field name="name">Employés AlMiyahDZ</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créer un nouvel employé
+                </p>
+            </field>
+        </record>
+
+        <record id="action_almiyah_technicians" model="ir.actions.act_window">
+            <field name="name">Techniciens</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('job_title', 'ilike', 'technicien')]</field>
+            <field name="context">{'default_job_title': 'Technicien'}</field>
+        </record>
+
+        <record id="action_almiyah_commercials" model="ir.actions.act_window">
+            <field name="name">Agents commerciaux</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('job_title', 'ilike', 'commercial')]</field>
+            <field name="context">{'default_job_title': 'Agent Commercial'}</field>
+        </record>
+
+        <record id="action_almiyah_agents_clientele" model="ir.actions.act_window">
+            <field name="name">Agents clientèle</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('job_title', 'ilike', 'clientèle')]</field>
+            <field name="context">{'default_job_title': 'Agent Clientèle'}</field>
+        </record>
+
+        <record id="view_employee_form_almiyah_agency" model="ir.ui.view">
+            <field name="name">hr.employee.form.almiyah.agency</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='department_id']" position="after">
+                    <field name="agency_id" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- AGENCES -->
+        <!-- ============================================== -->
+        <record id="action_almiyah_agencies" model="ir.actions.act_window">
+            <field name="name">Agences</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('is_agency', '=', True)]</field>
+            <field name="context">{'default_is_agency': True, 'default_is_company': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Créer une nouvelle agence
+                </p>
+            </field>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- CALENDRIER INTERVENTIONS -->
+        <!-- ============================================== -->
+        <record id="action_intervention_calendar" model="ir.actions.act_window">
+            <field name="name">Planning des interventions</field>
+            <field name="res_model">intervention.deplacement</field>
+            <field name="view_mode">calendar,list,form</field>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- FACTURES RECTIFICATIVES -->
+        <!-- ============================================== -->
+        <record id="action_almiyah_invoices" model="ir.actions.act_window">
+            <field name="name">Factures rectificatives</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="domain">[('claim_id', '!=', False)]</field>
+            <field name="context">{'default_move_type': 'out_invoice'}</field>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- ANALYSE / RAPPORTS -->
+        <!-- ============================================== -->
+        <record id="action_claim_analysis" model="ir.actions.act_window">
+            <field name="name">Analyse des réclamations</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">pivot,graph,list</field>
+            <field name="domain">[('is_claim', '=', True)]</field>
+        </record>
+
+        <!-- ============================================== -->
+        <!-- ÉTAPES RÉCLAMATIONS -->
+        <!-- ============================================== -->
+        <record id="action_almiyah_stages" model="ir.actions.act_window">
+            <field name="name">Étapes des réclamations</field>
+            <field name="res_model">project.task.type</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

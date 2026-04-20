@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_intervention_deplacement_tree" model="ir.ui.view">
+            <field name="name">intervention.deplacement.tree</field>
+            <field name="model">intervention.deplacement</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name" />
+                    <field name="date_deplacement" />
+                    <field name="location" />
+                    <field name="status" />
+                    <field name="task_id" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_intervention_deplacement_form" model="ir.ui.view">
+            <field name="name">intervention.deplacement.form</field>
+            <field name="model">intervention.deplacement</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="task_id" />
+                            <field name="date_deplacement" />
+                            <field name="location" />
+                            <field name="status" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_intervention_deplacement_calendar" model="ir.ui.view">
+            <field name="name">intervention.deplacement.calendar</field>
+            <field name="model">intervention.deplacement</field>
+            <field name="arch" type="xml">
+                <calendar string="Déplacements" date_start="date_deplacement" color="task_id">
+                    <field name="name" />
+                    <field name="location" />
+                    <field name="status" />
+                    <field name="task_id" />
+                </calendar>
+            </field>
+        </record>
+
+        <record id="view_intervention_action_tree" model="ir.ui.view">
+            <field name="name">intervention.action.tree</field>
+            <field name="model">intervention.action</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="name" />
+                    <field name="date_action" />
+                    <field name="description" />
+                    <field name="technicien_id" />
+                    <field name="duree" />
+                    <field name="task_id" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_intervention_action_form" model="ir.ui.view">
+            <field name="name">intervention.action.form</field>
+            <field name="model">intervention.action</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="task_id" />
+                            <field name="date_action" />
+                            <field name="description" />
+                            <field name="technicien_id" />
+                            <field name="duree" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_intervention_deplacement" model="ir.actions.act_window">
+            <field name="name">Déplacements</field>
+            <field name="res_model">intervention.deplacement</field>
+            <field name="view_mode">list,form,calendar</field>
+        </record>
+
+        <record id="action_intervention_action" model="ir.actions.act_window">
+            <field name="name">Actions de réparation</field>
+            <field name="res_model">intervention.action</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

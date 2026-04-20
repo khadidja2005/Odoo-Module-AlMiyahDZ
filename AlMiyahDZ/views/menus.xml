@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ============================================== -->
+        <!-- Top-level app menu (appears in Odoo home menu) -->
+        <!-- ============================================== -->
+        <menuitem id="menu_almiyahdz_root"
+            name="AlMiyahDZ"
+            sequence="10" />
+
+        <!-- ============================================== -->
+        <!-- RÉCLAMATIONS -->
+        <!-- ============================================== -->
+        <menuitem id="menu_claim_submenu"
+            name="Réclamations"
+            parent="menu_almiyahdz_root"
+            sequence="10" />
+
+        <menuitem id="menu_claim_all"
+            name="Toutes les réclamations"
+            parent="menu_claim_submenu"
+            action="action_claim_task"
+            sequence="10" />
+
+        <menuitem id="menu_claim_technical"
+            name="Réclamations techniques"
+            parent="menu_claim_submenu"
+            action="action_claim_technical"
+            sequence="20" />
+
+        <menuitem id="menu_claim_commercial"
+            name="Réclamations commerciales"
+            parent="menu_claim_submenu"
+            action="action_claim_commercial"
+            sequence="30" />
+
+        <!-- ============================================== -->
+        <!-- INTERVENTIONS -->
+        <!-- ============================================== -->
+        <menuitem id="menu_intervention_submenu"
+            name="Interventions"
+            parent="menu_almiyahdz_root"
+            sequence="20" />
+
+        <menuitem id="menu_deplacement"
+            name="Déplacements"
+            parent="menu_intervention_submenu"
+            action="action_intervention_deplacement"
+            sequence="10" />
+
+        <menuitem id="menu_action_reparation"
+            name="Actions de réparation"
+            parent="menu_intervention_submenu"
+            action="action_intervention_action"
+            sequence="20" />
+
+        <menuitem id="menu_planning_calendar"
+            name="Planning interventions"
+            parent="menu_intervention_submenu"
+            action="action_intervention_calendar"
+            sequence="30" />
+
+        <!-- ============================================== -->
+        <!-- CONTACTS / RÉCLAMANTS -->
+        <!-- ============================================== -->
+        <menuitem id="menu_contacts_submenu"
+            name="Contacts"
+            parent="menu_almiyahdz_root"
+            groups="AlMiyahDZ.group_agent_clientele,AlMiyahDZ.group_responsable_agence,AlMiyahDZ.group_commercial,AlMiyahDZ.group_comptable,AlMiyahDZ.group_cellule_veille"
+            sequence="30" />
+
+        <menuitem id="menu_all_claimants"
+            name="Tous les réclamants"
+            parent="menu_contacts_submenu"
+            action="action_almiyah_partners"
+            sequence="10" />
+
+        <menuitem id="menu_claimants_citizens"
+            name="Citoyens"
+            parent="menu_contacts_submenu"
+            action="action_almiyah_citizens"
+            sequence="20" />
+
+        <menuitem id="menu_claimants_companies"
+            name="Entreprises"
+            parent="menu_contacts_submenu"
+            action="action_almiyah_companies"
+            sequence="30" />
+
+        <!-- ============================================== -->
+        <!-- EMPLOYÉS / ÉQUIPES -->
+        <!-- ============================================== -->
+        <menuitem id="menu_employees_submenu"
+            name="Équipes"
+            parent="menu_almiyahdz_root"
+            groups="AlMiyahDZ.group_agent_clientele,AlMiyahDZ.group_responsable_agence,AlMiyahDZ.group_commercial,AlMiyahDZ.group_comptable,AlMiyahDZ.group_cellule_veille"
+            sequence="40" />
+
+        <menuitem id="menu_all_employees"
+            name="Tous les employés"
+            parent="menu_employees_submenu"
+            action="action_almiyah_employees"
+            sequence="10" />
+
+        <menuitem id="menu_technicians"
+            name="Techniciens"
+            parent="menu_employees_submenu"
+            action="action_almiyah_technicians"
+            sequence="20" />
+
+        <menuitem id="menu_agents_commerciaux"
+            name="Agents commerciaux"
+            parent="menu_employees_submenu"
+            action="action_almiyah_commercials"
+            sequence="30" />
+
+        <menuitem id="menu_agents_clientele"
+            name="Agents clientèle"
+            parent="menu_employees_submenu"
+            action="action_almiyah_agents_clientele"
+            sequence="40" />
+
+        <!-- ============================================== -->
+        <!-- AGENCES -->
+        <!-- ============================================== -->
+        <menuitem id="menu_agencies_submenu"
+            name="Agences"
+            parent="menu_almiyahdz_root"
+            groups="AlMiyahDZ.group_agent_clientele,AlMiyahDZ.group_responsable_agence,AlMiyahDZ.group_commercial,AlMiyahDZ.group_comptable,AlMiyahDZ.group_cellule_veille"
+            sequence="50" />
+
+        <menuitem id="menu_all_agencies"
+            name="Toutes les agences"
+            parent="menu_agencies_submenu"
+            action="action_almiyah_agencies"
+            sequence="10" />
+
+        <!-- ============================================== -->
+        <!-- COMPTABILITÉ / FACTURES -->
+        <!-- ============================================== -->
+        <menuitem id="menu_accounting_submenu"
+            name="Comptabilité"
+            parent="menu_almiyahdz_root"
+            groups="AlMiyahDZ.group_comptable"
+            sequence="60" />
+
+        <menuitem id="menu_invoices"
+            name="Factures rectificatives"
+            parent="menu_accounting_submenu"
+            action="action_almiyah_invoices"
+            sequence="10" />
+
+        <!-- ============================================== -->
+        <!-- RAPPORTS -->
+        <!-- ============================================== -->
+        <menuitem id="menu_reports_submenu"
+            name="Rapports"
+            parent="menu_almiyahdz_root"
+            groups="AlMiyahDZ.group_agent_clientele,AlMiyahDZ.group_responsable_agence,AlMiyahDZ.group_commercial,AlMiyahDZ.group_comptable,AlMiyahDZ.group_cellule_veille"
+            sequence="70" />
+
+        <menuitem id="menu_claim_analysis"
+            name="Analyse des réclamations"
+            parent="menu_reports_submenu"
+            action="action_claim_analysis"
+            sequence="10" />
+
+        <!-- ============================================== -->
+        <!-- CONFIGURATION -->
+        <!-- ============================================== -->
+        <menuitem id="menu_config_submenu"
+            name="Configuration"
+            parent="menu_almiyahdz_root"
+            groups="base.group_system"
+            sequence="100" />
+
+        <menuitem id="menu_config_stages"
+            name="Étapes réclamations"
+            parent="menu_config_submenu"
+            action="action_almiyah_stages"
+            sequence="10" />
+
+        <menuitem id="menu_config_groups"
+            name="Groupes utilisateurs"
+            parent="menu_config_submenu"
+            action="base.action_res_groups"
+            sequence="20" />
+
+        <!-- ============================================== -->
+        <!-- MENUS WEBSITE -->
+        <!-- ============================================== -->
+        <record id="website_menu_reclamation" model="website.menu">
+            <field name="name">Déposer réclamation</field>
+            <field name="url">/reclamation</field>
+            <field name="parent_id" ref="website.main_menu" />
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="website_menu_reclamation_status" model="website.menu">
+            <field name="name">Suivre Réclamation</field>
+            <field name="url">/reclamation/status</field>
+            <field name="parent_id" ref="website.main_menu" />
+            <field name="sequence">21</field>
+        </record>
+    </data>
+</odoo>

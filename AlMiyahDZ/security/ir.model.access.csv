@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_task_agent_clientele,project.task agent clientele,project.model_project_task,AlMiyahDZ.group_agent_clientele,1,1,1,1
+access_project_task_responsable,project.task responsable agence,project.model_project_task,AlMiyahDZ.group_responsable_agence,1,1,0,0
+access_project_task_commercial,project.task commercial,project.model_project_task,AlMiyahDZ.group_commercial,1,1,0,0
+access_project_task_technicien,project.task technicien,project.model_project_task,AlMiyahDZ.group_technicien,1,0,0,0
+access_project_task_chef_equipe,project.task chef equipe,project.model_project_task,AlMiyahDZ.group_chef_equipe,1,0,0,0
+access_project_task_comptable,project.task comptable,project.model_project_task,AlMiyahDZ.group_comptable,1,1,0,0
+access_project_task_portal,project.task portal clients,project.model_project_task,base.group_portal,1,0,0,0
+access_project_task_cellule_veille,project.task cellule veille,project.model_project_task,AlMiyahDZ.group_cellule_veille,1,1,1,0
+access_intervention_deplacement_agent_clientele,intervention.deplacement agent,model_intervention_deplacement,AlMiyahDZ.group_agent_clientele,1,1,1,1
+access_intervention_deplacement_responsable,intervention.deplacement responsable,model_intervention_deplacement,AlMiyahDZ.group_responsable_agence,1,1,1,1
+access_intervention_deplacement_chef,intervention.deplacement chef equipe,model_intervention_deplacement,AlMiyahDZ.group_chef_equipe,1,1,1,1
+access_intervention_deplacement_technicien,intervention.deplacement technicien,model_intervention_deplacement,AlMiyahDZ.group_technicien,1,0,0,0
+access_intervention_action_agent_clientele,intervention.action agent,model_intervention_action,AlMiyahDZ.group_agent_clientele,1,1,1,1
+access_intervention_action_responsable,intervention.action responsable,model_intervention_action,AlMiyahDZ.group_responsable_agence,1,1,1,1
+access_intervention_action_chef,intervention.action chef equipe,model_intervention_action,AlMiyahDZ.group_chef_equipe,1,1,1,1
+access_intervention_action_technicien,intervention.action technicien,model_intervention_action,AlMiyahDZ.group_technicien,1,0,0,0

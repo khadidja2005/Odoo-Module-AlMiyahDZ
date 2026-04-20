@@ -1,0 +1,173 @@
+<odoo>
+    <data>
+        <record id="view_task_form_claim" model="ir.ui.view">
+            <field name="name">project.task.form.claim</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">false</attribute>
+                </xpath>
+                <xpath expr="//form/header" position="inside">
+                    <button name="action_generate_invoice" type="object" string="Générer facture"
+                        groups="AlMiyahDZ.group_comptable"
+                        invisible="not is_claim or invoice_id"
+                        class="oe_highlight" />
+                    <button name="action_close_claim" type="object" string="Archiver"
+                        invisible="not is_claim" />
+                    <field name="is_claim" invisible="1" />
+                    <field name="claim_reference" invisible="1" />
+                </xpath>
+                <xpath expr="//form/sheet/notebook" position="inside">
+                    <page string="Réclamation" invisible="not is_claim">
+                        <group>
+                            <group>
+                                <field name="claim_reference" readonly="1" />
+                                <field name="claim_origin" />
+                                <field name="type_reclamation" />
+                                <field name="agency_id" />
+                            </group>
+                            <group>
+                                <field name="claimant_id" />
+                                <field name="claimant_address" />
+                                <field name="claimant_commune" />
+                                <field name="claimant_company_name"
+                                    invisible="claim_origin != 'company'" />
+                                <field name="agent_clientele_id" />
+                                <!-- <field name="commission_member_ids"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'technical')]}" /> -->
+                                <field name="commission_member_ids"
+                                    invisible="type_reclamation != 'commercial'" />
+                                <!-- <field name="pv_signataires_ids"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'commercial')]}" /> -->
+                                <field name="pv_signataires_ids"
+                                    invisible="type_reclamation != 'commercial'" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <!-- <field name="technician_ids"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'technical')]}" /> -->
+                                <field name="technician_ids"
+                                    invisible="type_reclamation != 'technical'" />
+                                <!-- <field name="chef_equipe_id"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'technical')]}" /> -->
+                                <field name="chef_equipe_id"
+                                    invisible="type_reclamation != 'technical'" />
+                                <!-- <field name="diagnostic_technique"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'technical')]}" /> -->
+                                <field name="diagnostic_technique"
+                                    invisible="type_reclamation != 'technical'" />
+                            </group>
+                            <group>
+                                <!-- <field name="complexite"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'technical')]}" /> -->
+                                <field name="complexite" invisible="type_reclamation != 'technical'" />
+                                <!-- <field name="gravite"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'technical')]}" /> -->
+                                <field name="gravite" invisible="type_reclamation != 'technical'" />
+                                <!-- <field name="pv_decision"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'commercial')]}" /> -->
+                                <field name="pv_decision"
+                                    invisible="type_reclamation != 'commercial'" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <!-- <field name="montant_dedommagement"
+                                    modifiers="{'invisible': [('type_reclamation', '!=', 'technical')]}" /> -->
+                                <field name="montant_dedommagement"
+                                    invisible="type_reclamation != 'technical'" />
+                                <field name="validation_comptable"
+                                    groups="AlMiyahDZ.group_comptable" />
+                            </group>
+                            <group>
+                                <field name="invoice_id" readonly="1"
+                                    context="{'default_move_type': 'out_invoice'}" />
+                                <field name="etat_final" />
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Interventions"
+                        invisible="not is_claim">
+                        <group>
+                            <field name="deplacement_ids" context="{'default_task_id': id}" />
+                            <field name="action_ids" context="{'default_task_id': id}" />
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_task_tree_claim" model="ir.ui.view">
+            <field name="name">project.task.tree.claim</field>
+            <field name="model">project.task</field>
+            <field name="priority">99</field>
+            <field name="arch" type="xml">
+                <list create="false">
+                    <field name="claim_reference" />
+                    <field name="name" />
+                    <field name="type_reclamation" />
+                    <field name="claim_origin" />
+                    <field name="stage_id" />
+                    <field name="user_ids" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_task_search_claim" model="ir.ui.view">
+            <field name="name">project.task.search.claim</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_search_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_tasks']" position="after">
+                    <filter string="Réclamations" name="is_claim" domain="[('is_claim', '=', True)]" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_close_claim" model="ir.actions.server">
+            <field name="name">Archiver réclamation</field>
+            <field name="model_id" ref="project.model_project_task" />
+            <field name="binding_model_id" ref="project.model_project_task" />
+            <field name="state">code</field>
+            <field name="code">records.action_close_claim()</field>
+        </record>
+
+        <record id="action_claim_technical" model="ir.actions.act_window">
+            <field name="name">Réclamations techniques</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+            <field name="domain">[("is_claim", "=", True), ("type_reclamation", "=", "technical")]</field>
+            <field name="context">{"default_is_claim": True, "default_type_reclamation":
+                "technical"}</field>
+        </record>
+
+        <record id="action_claim_technical" model="ir.actions.act_window">
+            <field name="name">Réclamations techniques</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+            <field name="domain">[("is_claim", "=", True), ("type_reclamation", "=", "technical")]</field>
+            <field name="context">{"default_is_claim": True, "default_type_reclamation":
+                "technical"}</field>
+        </record>
+
+        <record id="action_claim_commercial" model="ir.actions.act_window">
+            <field name="name">Réclamations commerciales</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+            <field name="domain">[("is_claim", "=", True), ("type_reclamation", "=", "commercial")]</field>
+            <field name="context">{"default_is_claim": True, "default_type_reclamation":
+                "commercial"}</field>
+        </record>
+
+        <record id="action_claim_task" model="ir.actions.act_window">
+            <field name="name">Réclamations</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">list,kanban,form,calendar,pivot,graph</field>
+            <field name="domain">[("is_claim", "=", True)]</field>
+            <field name="context">{"default_is_claim": True}</field>
+        </record>
+
+    </data>
+</odoo>

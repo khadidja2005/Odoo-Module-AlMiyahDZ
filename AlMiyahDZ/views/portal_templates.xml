@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- ============================================ -->
+    <!-- PAGE DU FORMULAIRE DE RÉCLAMATION (PUBLIC) -->
+    <!-- ============================================ -->
+    <template id="reclamation_form_template" name="Déposer une réclamation">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <!-- Header Card -->
+                        <div class="card shadow-lg mb-4 border-0">
+                            <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);">
+                                <h2 class="mb-0 fw-bold">
+                                    <i class="fa fa-tint me-2"></i>
+                                    Déposer une Réclamation
+                                </h2>
+                                <p class="mb-0 mt-2 opacity-75">AlMiyah Djazair - Service Client</p>
+                            </div>
+                            <div class="card-body p-4">
+                                <form action="/reclamation/submit" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <!-- Section: Identification -->
+                                    <div class="mb-4">
+                                        <h5 class="text-primary border-bottom pb-2">
+                                            <i class="fa fa-user me-2"></i>Vos Informations
+                                        </h5>
+                                        
+                                        <!-- Type de Réclamant -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Vous êtes : <span class="text-danger">*</span></label>
+                                            <div class="d-flex gap-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reclamant_type" 
+                                                           id="type_citoyen" value="citoyen" checked="checked" required="required"/>
+                                                    <label class="form-check-label" for="type_citoyen">
+                                                        <i class="fa fa-user me-1"></i> Un Citoyen
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="reclamant_type" 
+                                                           id="type_entreprise" value="entreprise"/>
+                                                    <label class="form-check-label" for="type_entreprise">
+                                                        <i class="fa fa-building me-1"></i> Une Entreprise
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Nom et Email -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="name" class="form-label fw-bold">
+                                                    Nom Complet <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" name="name" id="name" 
+                                                       required="required" placeholder="ex: Ahmed Benali"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="email" class="form-label fw-bold">
+                                                    Email <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="email" class="form-control" name="email" id="email" 
+                                                       required="required" placeholder="ex: email@example.com"/>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Téléphone -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="phone" class="form-label fw-bold">Téléphone</label>
+                                                <input type="tel" class="form-control" name="phone" id="phone" 
+                                                       placeholder="ex: 0555 12 34 56"/>
+                                            </div>
+                                        </div>
+
+                                        <!-- Adresse et Commune -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="address" class="form-label fw-bold">Adresse</label>
+                                                <input type="text" class="form-control" name="address" id="address" 
+                                                       placeholder="ex: 123 Rue de l'Exemple"/>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="commune" class="form-label fw-bold">Commune</label>
+                                                <input type="text" class="form-control" name="commune" id="commune" 
+                                                       placeholder="ex: Alger Centre"/>
+                                            </div>
+                                        </div>
+
+                                        <!-- Raison sociale (si entreprise) -->
+                                        <div class="mb-3" id="company_name_div" style="display: none;">
+                                            <label for="company_name" class="form-label fw-bold">Raison sociale</label>
+                                            <input type="text" class="form-control" name="company_name" id="company_name" 
+                                                   placeholder="ex: Société XYZ"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Section: Réclamation -->
+                                    <div class="mb-4">
+                                        <h5 class="text-primary border-bottom pb-2">
+                                            <i class="fa fa-file-text me-2"></i>Votre Réclamation
+                                        </h5>
+                                        
+                                        <!-- Objet -->
+                                        <div class="mb-3">
+                                            <label for="subject" class="form-label fw-bold">
+                                                Objet de la réclamation <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" name="subject" id="subject" 
+                                                   required="required" 
+                                                   placeholder="ex: Facture incorrecte, Fuite d'eau, Problème de compteur..."/>
+                                        </div>
+                                        
+                                        <!-- Description -->
+                                        <div class="mb-3">
+                                            <label for="description" class="form-label fw-bold">
+                                                Description détaillée <span class="text-danger">*</span>
+                                            </label>
+                                            <textarea class="form-control" name="description" id="description" 
+                                                      rows="5" required="required"
+                                                      placeholder="Décrivez votre problème en détail : adresse concernée, dates, numéro de contrat si applicable..."></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Pièces justificatives -->
+                                    <div class="mb-3">
+                                        <label for="attachment" class="form-label fw-bold">Pièces justificatives</label>
+                                        <input type="file" name="attachment" id="attachment" class="form-control" multiple="multiple" />
+                                        <div class="form-text">Formats acceptés : PDF, JPG, PNG, DOC, etc. (max 10MB par fichier)</div>
+                                    </div>
+                                    
+                                    <!-- Submit Button -->
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-lg px-5 text-white" style="background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%); border: none;">
+                                            <i class="fa fa-paper-plane me-2"></i>
+                                            Envoyer ma réclamation
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Info -->
+                        <div class="text-center text-muted">
+                            <p class="mb-1">
+                                <i class="fa fa-phone me-1"></i> Service Client : 3020
+                            </p>
+                            <p class="mb-0">
+                                <i class="fa fa-envelope me-1"></i> contact@almiyah.dz
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.querySelectorAll('input[name="reclamant_type"]').forEach(function(radio) {
+                        radio.addEventListener('change', function() {
+                            var companyDiv = document.getElementById('company_name_div');
+                            if (this.value === 'entreprise') {
+                                companyDiv.style.display = 'block';
+                            } else {
+                                companyDiv.style.display = 'none';
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================ -->
+    <!-- PAGE DE SUCCÈS (APRÈS SOUMISSION) -->
+    <!-- ============================================ -->
+    <template id="reclamation_success_template" name="Réclamation Reçue">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm text-center">
+                            <div class="card-body p-5">
+                                <!-- Success Icon -->
+                                <div class="mb-4">
+                                    <span class="fa-stack fa-4x" style="color: #27ae60;">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </div>
+                                
+                                <!-- Success Message -->
+                                <h1 class="display-5 mb-3" style="color: #27ae60;">Merci !</h1>
+                                <p class="lead text-muted mb-4">
+                                    Votre réclamation a bien été enregistrée et sera traitée dans les plus brefs délais.
+                                </p>
+                                
+                                <hr class="my-4"/>
+                                
+                                <!-- Reference Number -->
+                                <div class="rounded p-4 mb-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                                    <p class="mb-2 text-muted">Votre numéro de référence :</p>
+                                    <h2 class="mb-0" style="color: #1E5799;">
+                                        <i class="fa fa-hashtag me-2"></i>
+                                        <t t-esc="reclamation.claim_reference"/>
+                                    </h2>
+                                </div>
+                                
+                                <!-- Next Steps -->
+                                <div class="alert alert-info text-start mb-4">
+                                    <h5 class="alert-heading">
+                                        <i class="fa fa-info-circle me-2"></i>Prochaines étapes :
+                                    </h5>
+                                    <ol class="mb-0">
+                                        <li>Conservez votre numéro de référence</li>
+                                        <li>Un agent prendra en charge votre demande</li>
+                                        <li>Vous serez contacté(e) par email ou téléphone</li>
+                                    </ol>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="/" class="btn btn-outline-primary btn-lg">
+                                        <i class="fa fa-home me-2"></i>Retour à l'accueil
+                                    </a>
+                                    <a href="/reclamation" class="btn btn-primary btn-lg">
+                                        <i class="fa fa-plus me-2"></i>Nouvelle réclamation
+                                    </a>
+                                    <a href="/reclamation/status" class="btn btn-info btn-lg">
+                                        <i class="fa fa-search me-2"></i>Suivre le statut
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Info -->
+                        <div class="text-center text-muted mt-4">
+                            <p class="mb-0">
+                                Des questions ? Appelez le <strong>3020</strong> avec votre numéro de référence.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================ -->
+    <!-- PAGE PORTAIL : MES RÉCLAMATIONS -->
+    <!-- ============================================ -->
+    <template id="portal_my_claims" name="Mes Réclamations">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <div class="o_portal container">
+                <header>
+                    <h1>Mes Réclamations</h1>
+                </header>
+                <div class="o_portal_my_doc_table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Référence</th>
+                                <th>Objet</th>
+                                <th>Type</th>
+                                <th>Statut</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="tasks" t-as="task">
+                                <tr>
+                                    <td><t t-esc="task.claim_reference or task.name"/></td>
+                                    <td><t t-esc="task.name"/></td>
+                                    <td>
+                                        <t t-esc="dict(task._fields['type_reclamation'].selection).get(task.type_reclamation, task.type_reclamation)"/>
+                                    </td>
+                                    <td>
+                                        <t t-set="status_display" t-value="{'New': 'Nouvelle', 'In Progress': 'En cours', 'Done': 'Terminée', 'Cancelled': 'Annulée'}.get(task.stage_id.name, task.stage_id.name)"/>
+                                        <span t-att-class="'badge ' + ('badge-success' if task.stage_id.name == 'Done' else 'badge-warning' if task.stage_id.name == 'In Progress' else 'badge-info')">
+                                            <t t-esc="status_display"/>
+                                        </span>
+                                    </td>
+                                    <td><t t-esc="task.create_date.strftime('%d/%m/%Y')"/></td>
+                                    <td>
+                                        <a t-att-href="'/my/reclamations/%s' % task.id" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-eye"></i> Voir
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="not tasks">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">
+                                        <i class="fa fa-info-circle"></i> Aucune réclamation trouvée.
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================ -->
+    <!-- PAGE PORTAIL : DÉTAIL D'UNE RÉCLAMATION -->
+    <!-- ============================================ -->
+    <template id="portal_my_claim_detail" name="Détail Réclamation">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <div class="o_portal container">
+                <header>
+                    <h1>Réclamation <t t-esc="task.claim_reference or task.name"/></h1>
+                </header>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Informations de la réclamation</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Référence :</strong> <t t-esc="task.claim_reference"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Statut :</strong>
+                                        <t t-if="task.etat_final">
+                                            <span class="badge badge-success"><t t-esc="dict(task._fields['etat_final'].selection).get(task.etat_final, task.etat_final)"/></span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-warning">En cours</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Objet :</strong> <t t-esc="task.name"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Type :</strong>
+                                        <t t-esc="dict(task._fields['type_reclamation'].selection).get(task.type_reclamation, task.type_reclamation)"/>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong>Origine :</strong>
+                                        <t t-esc="dict(task._fields['claim_origin'].selection).get(task.claim_origin, task.claim_origin)"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Date de création :</strong> <t t-esc="task.create_date.strftime('%d/%m/%Y %H:%M')"/>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Description :</strong>
+                                    <div class="mt-2"><t t-out="task.description"/></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Messages/Communications -->
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Communications</h5>
+                            </div>
+                            <div class="card-body">
+                                <t t-if="task.message_ids">
+                                    <t t-foreach="task.message_ids.sorted(key=lambda m: m.date, reverse=True)" t-as="message">
+                                        <div class="message mb-3">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <img t-att-src="message.author_id.avatar_128" class="rounded-circle" width="40" height="40"/>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <div class="d-flex justify-content-between">
+                                                        <strong><t t-esc="message.author_id.name"/></strong>
+                                                        <small class="text-muted"><t t-esc="message.date.strftime('%d/%m/%Y %H:%M')"/></small>
+                                                    </div>
+                                                    <div class="mt-1"><t t-out="message.body"/></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </t>
+                                <t t-if="not task.message_ids">
+                                    <p class="text-muted mb-0">Aucune communication pour le moment.</p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Attachments -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Pièces jointes</h5>
+                            </div>
+                            <div class="card-body">
+                                <t t-if="task.attachment_ids">
+                                    <ul class="list-group list-group-flush">
+                                        <t t-foreach="task.attachment_ids" t-as="attachment">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <a t-att-href="'/web/content/%s?download=true' % attachment.id" t-esc="attachment.name"/>
+                                                <small class="text-muted"><t t-esc="attachment.create_date.strftime('%d/%m/%Y')"/></small>
+                                            </li>
+                                        </t>
+                                    </ul>
+                                </t>
+                                <t t-if="not task.attachment_ids">
+                                    <p class="text-muted mb-0">Aucune pièce jointe.</p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================ -->
+    <!-- PAGE PUBLIQUE : SUIVI DE STATUT -->
+    <!-- ============================================ -->
+    <template id="reclamation_status_form" name="Suivre ma réclamation">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #4A90D9 0%, #1E5799 100%); color: white;">
+                                <h2 class="mb-0 fw-bold">
+                                    <i class="fa fa-search me-2"></i>
+                                    Suivre ma réclamation
+                                </h2>
+                            </div>
+                            <div class="card-body p-4">
+                                <p class="text-muted text-center mb-4">
+                                    Entrez votre numéro de référence et votre email pour consulter le statut de votre réclamation.
+                                </p>
+
+                                <t t-if="error">
+                                    <div class="alert alert-danger">
+                                        <t t-esc="error"/>
+                                    </div>
+                                </t>
+
+                                <form action="/reclamation/status" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                    <div class="mb-3">
+                                        <label for="reference" class="form-label fw-bold">Numéro de référence *</label>
+                                        <input type="text" name="reference" id="reference" class="form-control" required="required"
+                                               placeholder="ex: REC-000001"/>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label fw-bold">Email *</label>
+                                        <input type="email" name="email" id="email" class="form-control" required="required"
+                                               placeholder="ex: email@example.com"/>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-lg px-5" style="background: linear-gradient(135deg, #4A90D9 0%, #1E5799 100%); border: none; color: white;">
+                                            <i class="fa fa-search me-2"></i>
+                                            Consulter le statut
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================ -->
+    <!-- PAGE PUBLIQUE : DÉTAIL STATUT -->
+    <!-- ============================================ -->
+    <template id="reclamation_status_detail" name="Statut de la réclamation">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm">
+                            <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #4A90D9 0%, #1E5799 100%); color: white;">
+                                <h2 class="mb-0 fw-bold">
+                                    <i class="fa fa-info-circle me-2"></i>
+                                    Statut de votre réclamation
+                                </h2>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <strong>Référence :</strong> <t t-esc="task.claim_reference"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Statut actuel :</strong>
+                                        <t t-if="task.etat_final">
+                                            <span class="badge badge-success fs-6"><t t-esc="dict(task._fields['etat_final'].selection).get(task.etat_final, task.etat_final)"/></span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-warning fs-6">En cours</span>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <strong>Objet :</strong> <t t-esc="task.name"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Type :</strong>
+                                        <t t-esc="dict(task._fields['type_reclamation'].selection).get(task.type_reclamation, task.type_reclamation)"/>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <strong>Adresse :</strong> <t t-esc="task.claimant_address or 'N/A'"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Commune :</strong> <t t-esc="task.claimant_commune or 'N/A'"/>
+                                    </div>
+                                </div>
+
+                                <t t-if="task.claim_origin == 'company'">
+                                    <div class="mb-4">
+                                        <strong>Raison sociale :</strong> <t t-esc="task.claimant_company_name or 'N/A'"/>
+                                    </div>
+                                </t>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <strong>Date de soumission :</strong> <t t-esc="task.create_date.strftime('%d/%m/%Y %H:%M')"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Dernière mise à jour :</strong> <t t-esc="task.write_date.strftime('%d/%m/%Y %H:%M')"/>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <strong>Description :</strong>
+                                    <div class="mt-2 p-3 bg-light rounded"><t t-out="task.description"/></div>
+                                </div>
+
+                                <!-- Status Timeline (simplified) -->
+                                <div class="mb-4">
+                                    <h5>Historique du statut</h5>
+                                    <div class="timeline">
+                                        <t t-foreach="task.message_ids.filtered(lambda m: m.subtype_id.name == 'Stage changed').sorted(key=lambda m: m.date)" t-as="msg">
+                                            <div class="timeline-item mb-3">
+                                                <div class="timeline-marker bg-primary"></div>
+                                                <div class="timeline-content">
+                                                    <small class="text-muted"><t t-esc="msg.date.strftime('%d/%m/%Y %H:%M')"/></small>
+                                                    <p class="mb-0"><t t-out="msg.body"/></p>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-if="not task.message_ids.filtered(lambda m: m.subtype_id.name == 'Stage changed')">
+                                            <p class="text-muted">Aucun changement de statut enregistré.</p>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <a href="/reclamation" class="btn btn-primary me-2">
+                                        <i class="fa fa-plus me-1"></i>Nouvelle réclamation
+                                    </a>
+                                    <a href="/reclamation/status" class="btn btn-outline-primary">
+                                        <i class="fa fa-refresh me-1"></i>Vérifier à nouveau
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================ -->
+    <!-- PAGE DE SUCCÈS DE SOUMISSION DE RÉCLAMATION -->
+    <!-- ============================================ -->
+    <template id="reclamation_success_template" name="Réclamation soumise avec succès">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <!-- Success Card -->
+                        <div class="card shadow-lg mb-4 border-0">
+                            <div class="card-header bg-success text-white text-center py-4">
+                                <h2 class="mb-0 fw-bold">
+                                    <i class="fa fa-check-circle me-2"></i>
+                                    Réclamation Soumise avec Succès
+                                </h2>
+                                <p class="mb-0 mt-2 opacity-75">Votre réclamation a été enregistrée</p>
+                            </div>
+                            <div class="card-body p-4 text-center">
+                                <div class="mb-4">
+                                    <i class="fa fa-check-circle text-success" style="font-size: 4rem;"></i>
+                                </div>
+                                <h4 class="mb-3">Merci pour votre réclamation !</h4>
+                                <p class="mb-4">
+                                    Votre réclamation a été enregistrée avec succès. Vous pouvez suivre son évolution 
+                                    en utilisant la référence ci-dessous.
+                                </p>
+                                
+                                <div class="alert alert-info" role="alert">
+                                    <h5 class="alert-heading">
+                                        <i class="fa fa-tag me-2"></i>Référence de votre réclamation
+                                    </h5>
+                                    <p class="mb-0 fs-4 fw-bold text-primary">
+                                        <t t-esc="reclamation.claim_reference"/>
+                                    </p>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <a href="/reclamation/status" class="btn btn-primary btn-lg me-3">
+                                        <i class="fa fa-eye me-2"></i>
+                                        Voir le statut
+                                    </a>
+                                    <a href="/" class="btn btn-outline-secondary btn-lg">
+                                        <i class="fa fa-home me-2"></i>
+                                        Retour à l'accueil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================ -->
+    <!-- PAGE DE SUIVI DU STATUT DE RÉCLAMATION -->
+    <!-- ============================================ -->
+    <template id="reclamation_status_template" name="Suivre le statut de votre réclamation">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <!-- Header Card -->
+                        <div class="card shadow-lg mb-4 border-0">
+                            <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);">
+                                <h2 class="mb-0 fw-bold">
+                                    <i class="fa fa-search me-2"></i>
+                                    Suivre Votre Réclamation
+                                </h2>
+                                <p class="mb-0 mt-2 opacity-75">AlMiyah Djazair - Service Client</p>
+                            </div>
+                            <div class="card-body p-4">
+                                <form action="/reclamation/status" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <div class="mb-4">
+                                        <label for="reference" class="form-label fw-bold">
+                                            Référence de la réclamation <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" name="reference" id="reference" 
+                                               required="required" placeholder="ex: REC-000001"/>
+                                        <div class="form-text">
+                                            Entrez la référence que vous avez reçue lors de la soumission de votre réclamation.
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label for="email" class="form-label fw-bold">
+                                            Email <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="email" class="form-control form-control-lg" name="email" id="email" 
+                                               required="required" placeholder="ex: email@example.com"/>
+                                        <div class="form-text">
+                                            Entrez l'email utilisé lors de la soumission.
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fa fa-search me-2"></i>
+                                            Consulter le statut
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Result -->
+                        <t t-if="reclamation">
+                            <div class="card shadow-lg border-0">
+                                <div class="card-header bg-success text-white py-3">
+                                    <h5 class="mb-0">
+                                        <i class="fa fa-check-circle me-2"></i>
+                                        Statut de votre réclamation
+                                    </h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4"><strong>Référence:</strong></div>
+                                        <div class="col-sm-8"><t t-esc="reclamation.claim_reference"/></div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4"><strong>Objet:</strong></div>
+                                        <div class="col-sm-8"><t t-esc="reclamation.name"/></div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4"><strong>Date:</strong></div>
+                                        <div class="col-sm-8"><t t-esc="reclamation.create_date"/></div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4"><strong>Statut actuel:</strong></div>
+                                        <div class="col-sm-8">
+                                            <t t-set="display_status" t-value="reclamation.etat_final or reclamation.stage_id.name"/>
+                                            <t t-set="status_class" t-value="'badge bg-secondary'"/>
+                                            <t t-if="reclamation.etat_final == 'resolved'">
+                                                <t t-set="status_class" t-value="'badge bg-success'"/>
+                                            </t>
+                                            <t t-elif="reclamation.etat_final == 'rejected'">
+                                                <t t-set="status_class" t-value="'badge bg-danger'"/>
+                                            </t>
+                                            <t t-elif="reclamation.etat_final == 'pending'">
+                                                <t t-set="status_class" t-value="'badge bg-warning'"/>
+                                            </t>
+                                            <t t-elif="reclamation.stage_id.name == 'New'">
+                                                <t t-set="status_class" t-value="'badge bg-info'"/>
+                                            </t>
+                                            <t t-elif="reclamation.stage_id.name == 'In Progress'">
+                                                <t t-set="status_class" t-value="'badge bg-warning'"/>
+                                            </t>
+                                            <t t-elif="reclamation.stage_id.name == 'Done'">
+                                                <t t-set="status_class" t-value="'badge bg-success'"/>
+                                            </t>
+                                            <t t-elif="reclamation.stage_id.name == 'Cancelled'">
+                                                <t t-set="status_class" t-value="'badge bg-danger'"/>
+                                            </t>
+                                            <span t-att-class="status_class + ' fs-6'">
+                                                <t t-esc="display_status"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4"><strong>Dernière mise à jour:</strong></div>
+                                        <div class="col-sm-8"><t t-esc="reclamation.write_date.strftime('%d/%m/%Y %H:%M')"/></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4"><strong>Description:</strong></div>
+                                        <div class="col-sm-8"><t t-esc="reclamation.description"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        
+                        <t t-if="error">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fa fa-exclamation-triangle me-2"></i>
+                                <strong>Erreur:</strong> <t t-esc="error"/>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
